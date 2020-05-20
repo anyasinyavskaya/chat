@@ -27,19 +27,3 @@ describe('/POST/ login', () => {
             });
     });
 });
-
-describe('/GET/chat/create', () => {
-    it('Создание нового чата', (done) => {
-        agent.get('/chat/create')
-            .send({name: 'chat21'})
-            .then(function (res) {
-                res.should.
-                agent.get('/chat')
-                    .then(function (res2) {
-                        // should get status 200, which indicates req.session existence.
-                        res2.should.have.status(200);
-                        done();
-                    });
-            });
-    });
-});
