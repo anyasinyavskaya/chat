@@ -9,13 +9,13 @@ indexRouter.get('/', function (req, res, next) {
     if (req.session.user) {
         res.redirect('/chat')
     } else {
-        res.render('index', { expressFlash: req.flash('error')});
+        res.render('index', {expressFlash: req.flash('error')});
     }
     res.end();
 });
 
 indexRouter.get('/createAccount', function (req, res, next) {
-    res.render('register', { expressFlash: req.flash('error') });
+    res.render('register', {expressFlash: req.flash('error')});
 });
 
 indexRouter.post('/register', function (req, res, next) {
@@ -25,8 +25,8 @@ indexRouter.post('/register', function (req, res, next) {
         if (!user) {
             console.log(message);
             req.flash('error', message);
-            res.render('register', { expressFlash: req.flash('error') });
-        }  else {
+            res.render('register', {expressFlash: req.flash('error')});
+        } else {
             if (err) {
                 next(err)
             } else {
@@ -45,7 +45,7 @@ indexRouter.post('/login', function (req, res, next) {
         if (!user) {
             console.log(message);
             req.flash('error', message);
-            res.render('index', { expressFlash: req.flash('error') });
+            res.render('index', {expressFlash: req.flash('error')});
         } else {
             if (err) {
                 next(err)

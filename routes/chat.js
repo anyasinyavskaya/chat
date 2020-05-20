@@ -9,7 +9,7 @@ chatRouter.get('/', function (req, res, next) {
     if (!req.session.user) {
         res.redirect('/')
     } else {
-        res.render('chat-list', { expressFlash: req.flash('error')});
+        res.render('chat-list', {expressFlash: req.flash('error')});
     }
     res.end();
 });
@@ -21,10 +21,10 @@ chatRouter.post('/create', function (req, res, next) {
     }
     let name = req.param('name');
     roomRepository.create(user, name, function (done, err, message) {
-        if (!done){
+        if (!done) {
             console.log(message);
             req.flash('error', message);
-            res.render('chat-list', { expressFlash: req.flash('error') });
+            res.render('chat-list', {expressFlash: req.flash('error')});
         } else {
             if (err) {
                 next(err)
@@ -43,10 +43,10 @@ chatRouter.get('/enter', function (req, res, next) {
     }
     let name = req.param('name');
     roomRepository.get(user, name, function (done, err, message) {
-        if (!done){
+        if (!done) {
             console.log(message);
             req.flash('error', message);
-            res.render('chat-list', { expressFlash: req.flash('error') });
+            res.render('chat-list', {expressFlash: req.flash('error')});
         } else {
             if (err) {
                 next(err)

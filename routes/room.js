@@ -73,7 +73,7 @@ roomRouter.post('/send', function (req, res, next) {
                 send: 'send?name=' + name,
                 logout: 'logout?name=' + name,
                 remove: 'remove?name=' + name
-            }, { expressFlash: req.flash('error') });
+            }, {expressFlash: req.flash('error')});
         } else {
             if (err) {
                 next(err)

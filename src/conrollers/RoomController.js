@@ -36,16 +36,16 @@ module.exports = {
             name: name,
         }).populate('owner')
             .exec(function (err, room) {
-            if (!room) {
-                callback(false, null, 'Чата не существует')
-            }
-            else {
-                if (room.owner === user._id) {
-                    rooms.remove({name: name});
-                    callback(true, err, '')
-                } else callback(false, err, 'Вы не создатель')
-            }
-        });
+                if (!room) {
+                    callback(false, null, 'Чата не существует')
+                }
+                else {
+                    if (room.owner === user._id) {
+                        rooms.remove({name: name});
+                        callback(true, err, '')
+                    } else callback(false, err, 'Вы не создатель')
+                }
+            });
     },
 
     addMessage: function (name, text, user, callback) {
@@ -126,25 +126,24 @@ module.exports = {
                 callback(result, err, 'Ок')
             });
     },
-
     getUsers: function (name, callback) {
         rooms.findOne({
             name: name,
         })
             .populate('users')
             .exec(function (err, room) {
-            let result = '';
-            if (!room) {
-                console.log("Чата не существует");
-                throw err;
-            }
-            else {
-                room.users.forEach(function (item, i, arr) {
-                    if (item) result += '<div></div><a href="/ban?name=' + room.name + '&username=' + item.username + '">' +
-                        '<h4>' + item + '</h4></a><div>';
-                });
-            }
-            callback(result)
-        });
+                let result = '';
+                if (!room) {
+                    console.log("Чата не существует");
+                    throw err;
+                }
+                else {
+                    room.users.forEach(function (item, i, arr) {
+                        if (item) result += '<div></div><a href="/ban?name=' + room.name + '&username=' + item.username + '">' +
+                            '<h4>' + item + '</h4></a><div>';
+                    });
+                }
+                callback(result)
+            });
     }
 };
