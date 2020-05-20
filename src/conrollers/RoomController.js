@@ -16,13 +16,17 @@ module.exports = {
             }
             else {
                 console.log(user);
-                rooms.create({
+                let newRoom = new rooms({
                     name: name,
                     owner: user._id,
                     users: [user._id],
-                }).then(function (err, name) {
-                    callback(true, err, 'Создан новый чат')
                 });
+                newRoom.save(function (err) {
+                    if (err) return handleError(err);
+                });
+                console.log("Новый чат", newRoom);
+                callback(true, err, 'Создан новый чат')
+
             }
         });
     },
@@ -114,9 +118,6 @@ module.exports = {
                     callback(false, null, 'Чата не существует')
                 }
                 else {
-                    console.log(room.messages.length);
-                    console.log(room.users.length);
-                    console.log(room.messages[0].sendBy);
                     room.messages.forEach(function (item, i, arr) {
                         result += '<dt>' + item.sendBy.username + '</dt>';
                         result += '<dd>' + item.text + '</dd>';

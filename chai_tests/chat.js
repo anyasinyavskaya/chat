@@ -1,9 +1,9 @@
 process.env.NODE_ENV = 'test';
 
 let mongoose = require("mongoose");
-let Messages = require("../controllers/models/MessageModel");
-let rooms = require("../controllers/models/RoomModel");
-let Users = require("../controllers/models/UserModel");
+let Messages = require("../src/models/MessageModel");
+let rooms = require("../src/models/RoomModel");
+let Users = require("../src/models/UserModel");
 
 let chai = require('chai');
 let chaiHttp = require('chai-http');

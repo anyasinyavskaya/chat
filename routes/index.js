@@ -2,8 +2,8 @@ const express = require('express');
 const indexRouter = express.Router();
 const flash = require('connect-flash');
 
-let userRepository = require("../controllers/repositories/UserRepository");
-let roomRepository = require("../controllers/repositories/RoomRepository");
+let userRepository = require("../src/conrollers/UserController");
+let roomRepository = require("../src/conrollers/RoomController");
 
 indexRouter.get('/', function (req, res, next) {
     if (req.session.user) {

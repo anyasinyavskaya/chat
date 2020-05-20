@@ -2,8 +2,8 @@ const express = require('express');
 const chatRouter = express.Router();
 const flash = require('connect-flash');
 
-let userRepository = require("../controllers/repositories/UserRepository");
-let roomRepository = require("../controllers/repositories/RoomRepository");
+let userRepository = require("../src/conrollers/UserController");
+let roomRepository = require("../src/conrollers/RoomController");
 
 chatRouter.get('/', function (req, res, next) {
     if (!req.session.user) {

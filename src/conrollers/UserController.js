@@ -1,25 +1,24 @@
-let Map = require("collections/map");
 let Users = require("../models/UserModel");
-
 
 module.exports = {
     register: function (username, password, callback) {
         Users.findOne({
             username: username,
             password: password
-        })
-            .exec(function (err, user) {
+        }).exec(function (err, user) {
                 if (user) {
                     callback(false, null, 'Такой логин уже используется');
                 }
                 else {
-                    Users.create({
+                    let newUser = new Users({
                         username: username,
                         password: password
-                    })
-                        .then(function (err, user) {
-                            callback(user, err, 'Пользователь зарегистрирован')
-                        });
+                    });
+                    newUser.save(function (err) {
+                        if (err) return handleError(err);
+                    });
+                    console.log("Новый пользователь", newUser);
+                    callback(newUser, err, 'Пользователь зарегистрирован')
                 }
             });
     },
