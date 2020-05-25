@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "mocha",
-    "preinstall": "npm install ./testy"
+    "preinstall": "npm install ../testy -g && npm install ../testy --save-dev"
   },
   "dependencies": {
     "chai-http": "^4.3.0",
