@@ -16,10 +16,15 @@
         }
 
         function getMessages() {
-            $.post("<%= messages %>", function (data) {
+            $.post("<%= messages %>", function (array) {
                 debugger
+                data = ""
+                array.forEach(function (item, i, arr) {
+                    data += '<dt>' + item.sendBy.username + '</dt>';
+                    data += '<dd>' + item.text + '</dd>';
+                });
                 $("#messages").html(data);
-                setTimeout(getMessages, 1000);
+                setTimeout(getMessages, 100);
             });
         }
 

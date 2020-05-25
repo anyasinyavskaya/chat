@@ -2,8 +2,8 @@ const express = require('express');
 const indexRouter = express.Router();
 const flash = require('connect-flash');
 
-let userRepository = require("../src/conrollers/UserController");
-let roomRepository = require("../src/conrollers/RoomController");
+let userController = require("../src/conrollers/UserController");
+let roomController = require("../src/conrollers/RoomController");
 
 indexRouter.get('/', function (req, res, next) {
     if (req.session.user) {
@@ -21,7 +21,7 @@ indexRouter.get('/createAccount', function (req, res, next) {
 indexRouter.post('/register', function (req, res, next) {
     let username = req.param('username');
     let password = req.param('password');
-    userRepository.register(username, password, function (user, err, message) {
+    userController.register(username, password, function (user, err, message) {
         if (!user) {
             console.log(message);
             req.flash('error', message);
@@ -41,11 +41,11 @@ indexRouter.post('/register', function (req, res, next) {
 indexRouter.post('/login', function (req, res, next) {
     let username = req.param('username');
     let password = req.param('password');
-    userRepository.login(username, password, function (user, err, message) {
+    userController.login(username, password, function (user, err, message) {
         if (!user) {
             console.log(message);
             req.flash('error', message);
-            res.render('index', {expressFlash: req.flash('error')});
+            res.render('index', {expressFlash: req.flash('error'), data:'Неверный логин или пароль'});
         } else {
             if (err) {
                 next(err)

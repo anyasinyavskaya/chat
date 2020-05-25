@@ -1,14 +1,50 @@
 module.exports = [
 
+    'enter',
+    '/chat/enter?name=ch2',
+
+    {
+        method: 'GET',
+
+        before: '/login?username=anyasinyavskaya&password=1999',
+
+        result: {
+            status: 200
+        }
+    },
+
+    'logout',
+    '/room/logout',
+    {
+        method: 'GET',
+
+        result: {
+            status: 200
+        }
+    },
+
+    'enter after logout',
+    '/chat/enter?name=ch2',
+
+    {
+        method: 'GET',
+
+        result: {
+            status: 200
+        }
+    },
+];
+/*
+module.exports = [
+
     'login',
     '/login',
 
     {
-
         method: 'POST',
 
         params: {
-            username: 'anyasinyavskaya',
+            username: 'anyasinyavskaya1',
             password: '1999'
         },
 
@@ -18,25 +54,41 @@ module.exports = [
     },
 
     'enter',
-    '/chat/enter?name=chat21',
+    '/chat/enter',
 
     {
         method: 'GET',
+
+        params: {
+            name: 'ch3'
+        },
         result: {
             status: 200
         }
     },
 
-    'send message',
-    '/room/send',
+    'get messages',
+    '/room/getMessages',
 
     {
         method: 'POST',
 
         params: {
-            name: 'chat21',
-            text: 'test'
+            name: 'ch3'
         },
+
+        result: {
+            data: {
+                type: 'array'
+            }
+        }
+    },
+
+    'send message',
+    '/room/send?name=ch3&text=test',
+
+    {
+        method: 'POST',
 
         result: {
             data: {
@@ -46,12 +98,11 @@ module.exports = [
                         value: "Сообщение отправлено",
                         type: 'String'
                     },
-                    sended: {
+                    result: {
                         type: 'object',
                         properties: {
                             _id: {
-                                required: true,
-                                maxValue: 10
+                                required: true
                             },
                             text: {
                                 required: true,
@@ -68,5 +119,7 @@ module.exports = [
             }
         }
 
-    },
+    }
 ];
+
+*/

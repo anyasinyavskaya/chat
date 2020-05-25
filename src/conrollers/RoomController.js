@@ -118,12 +118,12 @@ module.exports = {
                     callback(false, null, 'Чата не существует')
                 }
                 else {
-                    room.messages.forEach(function (item, i, arr) {
+                    /*room.messages.forEach(function (item, i, arr) {
                         result += '<dt>' + item.sendBy.username + '</dt>';
                         result += '<dd>' + item.text + '</dd>';
-                    });
+                    });*/
                 }
-                callback(result, err, 'Ок')
+                callback(room.messages, err, 'Ок')
             });
     },
     getUsers: function (name, callback) {

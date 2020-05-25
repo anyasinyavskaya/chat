@@ -2,9 +2,8 @@ const express = require('express');
 const roomRouter = express.Router();
 const flash = require('connect-flash');
 
-let userRepository = require("../src/conrollers/UserController");
-let roomRepository = require("../src/conrollers/RoomController");
-
+let userController = require("../src/conrollers/UserController");
+let roomController = require("../src/conrollers/RoomController");
 
 roomRouter.get('/', function (req, res, next) {
     let user = req.session.user;
@@ -45,44 +44,45 @@ roomRouter.get('/out', function (req, res, next) {
     console.log('Выход из чата');
     if (!user) {
         res.redirect('/')
+    } else {
+        let name = req.param('name');
+        roomController.out(user, name, function (done, err, message) {
+            if (done) {
+                res.redirect('/chat');
+                res.end();
+            }
+        })
     }
-    let name = req.param('name');
-    roomRepository.out(user, name, function (done, err, message) {
-        if (done) {
-            console.log("done");
-            res.redirect('/chat');
-            res.end();
-        }
-    })
 });
 
 roomRouter.post('/send', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
         res.redirect('/')
-    }
-    let text = req.param('text');
-    let name = req.param('name');
-    roomRepository.addMessage(name, text, user, function (result, err, message) {
-        if (!result) {
-            console.log(message);
-            req.flash('error', message);
-            res.render('chat', {
-                users: 'getUsers?name=' + name,
-                messages: 'getMessages?name=' + name,
-                send: 'send?name=' + name,
-                logout: 'logout?name=' + name,
-                remove: 'remove?name=' + name
-            }, {expressFlash: req.flash('error')});
-        } else {
-            if (err) {
-                next(err)
+    } else {
+        let text = req.param('text');
+        let name = req.param('name');
+        roomController.addMessage(name, text, user, function (result, err, message) {
+            if (!result) {
+                console.log(message);
+                req.flash('error', message);
+                res.render('chat', {
+                    users: 'getUsers?name=' + name,
+                    messages: 'getMessages?name=' + name,
+                    send: 'send?name=' + name,
+                    logout: 'logout?name=' + name,
+                    remove: 'remove?name=' + name
+                }, {expressFlash: req.flash('error')});
             } else {
-                res.json({message: 'Сообщение отправлено', result});
-                res.end()
+                if (err) {
+                    next(err)
+                } else {
+                    res.json({message: 'Сообщение отправлено', result});
+                    res.end()
+                }
             }
-        }
-    });
+        });
+    }
 });
 
 
@@ -92,7 +92,7 @@ roomRouter.get('/remove', function (req, res, next) {
         res.redirect('/')
     }
     let name = req.param('name');
-    roomRepository.remove(user, name, function (done, err, message) {
+    roomController.remove(user, name, function (done, err, message) {
         if (done) {
             res.redirect('/chat');
             res.end();
@@ -105,26 +105,28 @@ roomRouter.post('/getMessages', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
         res.redirect('/')
+    } else {
+        let name = req.param('name');
+        roomController.getMessages(name, function (messages, err, message) {
+            if (messages) {
+                res.send(messages);
+                res.end()
+            }
+        });
     }
-    let name = req.param('name');
-    roomRepository.getMessages(name, function (result, err, message) {
-        if (result) {
-            res.send(result);
-            res.end()
-        }
-    });
 });
 
 roomRouter.post('/getUsers', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
         res.redirect('/')
+    } else {
+        let name = req.param('name');
+        roomController.getUsers(name, function (result) {
+            res.send(result);
+            res.end();
+        });
     }
-    let name = req.param('name');
-    roomRepository.getUsers(name, function (result) {
-        res.write(result);
-        res.end();
-    });
 });
 
 module.exports = roomRouter;

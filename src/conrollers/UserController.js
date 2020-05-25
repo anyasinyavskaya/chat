@@ -30,8 +30,7 @@ module.exports = {
         }).exec(function (err, user) {
             if (!user) {
                 callback(false, null, 'Неверный логин или пароль')
-            }
-            callback(user, err, 'Выполнен вход в аккаунт')
+            } else callback(user, err, 'Выполнен вход в аккаунт')
         });
     }
 
