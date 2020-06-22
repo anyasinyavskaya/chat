@@ -2,12 +2,13 @@ const express = require('express');
 const chatRouter = express.Router();
 const flash = require('connect-flash');
 
-let userController = require("../src/conrollers/UserController");
-let roomController = require("../src/conrollers/RoomController");
+let userController = require("../src/controllers/UserController");
+let roomController = require("../src/controllers/RoomController");
 
 chatRouter.get('/', function (req, res, next) {
-    if (!req.session.user) {
-        res.redirect('/')
+    let user = req.session.user;
+    if (!user) {
+        res.status(401).redirect('/')
     } else {
         res.render('chat-list', {expressFlash: req.flash('error')});
     }
@@ -17,14 +18,14 @@ chatRouter.get('/', function (req, res, next) {
 chatRouter.post('/create', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
-        res.redirect('/')
+        res.status(401).redirect('/')
     } else {
         let name = req.param('name');
         roomController.create(user, name, function (done, err, message) {
             if (!done) {
                 console.log(message);
                 req.flash('error', message);
-                res.render('chat-list', {expressFlash: req.flash('error')});
+                res.status(403).render('chat-list', {expressFlash: req.flash('error')});
             } else {
                 if (err) {
                     next(err)
@@ -41,7 +42,7 @@ chatRouter.get('/enter', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
         console.log('Пользователь не найден');
-        res.redirect('/')
+        res.status(401).redirect('/')
     } else {
         let name = req.param('name');
         roomController.get(user, name, function (done, err, message) {

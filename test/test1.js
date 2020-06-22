@@ -1,41 +1,33 @@
+
+let userController = require("../src/controllers/UserController");
+
+/*module.exports = [
+
+    'authorization',
+    '/register',
+
+    {
+        method: 'POST',
+
+        params: {
+            username: 'anyasinyavskaya00000',
+            password: true
+        },
+        result: {
+            status: 403,
+            data: {
+                properties: {
+                    error:"Неправильный формат входных данных"
+                }
+            }
+        }
+    }
+
+];*/
+
+
 module.exports = [
 
-    'enter',
-    '/chat/enter?name=ch2',
-
-    {
-        method: 'GET',
-
-        before: '/login?username=anyasinyavskaya&password=1999',
-
-        result: {
-            status: 200
-        }
-    },
-
-    'logout',
-    '/room/logout',
-    {
-        method: 'GET',
-
-        result: {
-            status: 200
-        }
-    },
-
-    'enter after logout',
-    '/chat/enter?name=ch2',
-
-    {
-        method: 'GET',
-
-        result: {
-            status: 200
-        }
-    },
-];
-/*
-module.exports = [
 
     'login',
     '/login',
@@ -60,8 +52,11 @@ module.exports = [
         method: 'GET',
 
         params: {
-            name: 'ch3'
+            name: 'ch7'
         },
+
+        before: "kek",
+
         result: {
             status: 200
         }
@@ -74,18 +69,19 @@ module.exports = [
         method: 'POST',
 
         params: {
-            name: 'ch3'
+            name: 'ch7'
         },
 
         result: {
             data: {
-                type: 'array'
+                type: 'array',
+                eachType: 'object',
             }
         }
     },
 
     'send message',
-    '/room/send?name=ch3&text=test',
+    '/room/send?name=ch7&text=test',
 
     {
         method: 'POST',
@@ -104,6 +100,7 @@ module.exports = [
                             _id: {
                                 required: true
                             },
+
                             text: {
                                 required: true,
                                 type: 'String'
@@ -121,5 +118,27 @@ module.exports = [
 
     }
 ];
+
+/*
+let userController = require("../src/controllers/UserController");
+module.exports = [
+
+    'Unit test for login',
+    userController.testLogin,
+    {
+        params: {
+            username: "anyasinyavskaya1",
+            password: 1999
+
+        },
+
+        result: {
+            data: {
+                value: ["Пользователь успешно создан", false]
+            }
+        }
+    }
+];
+
 
 */
