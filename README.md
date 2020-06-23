@@ -1,7 +1,12 @@
 # chatmodel
 Чат для дипломного проекта
 
-Запуск
+Предварительно установить nodemon:
+ ```
+ npm install -g nodemon
+ ```
+ 
+Запуск 
 ``` 
 nodemon app.js
 ```
