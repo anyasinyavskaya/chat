@@ -43,20 +43,23 @@
 
         function logout() {
             $.get("<%= logout %>", function () {
+                location.replace('/');
             });
-            location.reload();
         }
 
         function out() {
             $.get("<%= out %>", function () {
+                location.assign('/chat');
             });
-            location.assign('/chat');
+
         }
 
         function remove() {
             $.get("<%= remove %>", function () {
+                location.assign('/chat');
             });
-            location.assign('/chat');
+
+            //location.assign('/chat');
         }
 
 

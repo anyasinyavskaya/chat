@@ -70,9 +70,9 @@ module.exports = {
     },
 
     testLogin: function (username, password) {
-        if (typeof username !== 'string' || typeof password !== 'string')
+        if (!isValidLogin(username) || !isValidPassword(password))
             return ["Неверный тип входных данных", false];
-        //console.log(typeof password);
+
         let user1 = {username: "anyasinyavskaya", password: "1999"};
         let user2 = {username: "anyasinyavskaya1", password: "1999"};
         let users = new Map();

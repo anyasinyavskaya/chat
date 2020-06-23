@@ -1,31 +1,13 @@
 
 let userController = require("../src/controllers/UserController");
 
-/*module.exports = [
+// Для тестирования расскоментируйте один из примеров и запустите testy --config
 
-    'authorization',
-    '/register',
+/**
+ * Пример #1
+ */
 
-    {
-        method: 'POST',
-
-        params: {
-            username: 'anyasinyavskaya00000',
-            password: true
-        },
-        result: {
-            status: 403,
-            data: {
-                properties: {
-                    error:"Неправильный формат входных данных"
-                }
-            }
-        }
-    }
-
-];*/
-
-
+/*
 module.exports = [
 
 
@@ -55,7 +37,6 @@ module.exports = [
             name: 'ch7'
         },
 
-        before: "kek",
 
         result: {
             status: 200
@@ -117,10 +98,74 @@ module.exports = [
         }
 
     }
-];
+];*/
+
+/**
+ * Пример #2
+ */
 
 /*
-let userController = require("../src/controllers/UserController");
+module.exports = [
+
+    'enter',
+    '/chat/enter',
+
+    {
+        method: 'GET',
+
+        params: {
+            name: 'ch7'
+        },
+
+        before: '/login?username=anyasinyavskaya1&password=1999',
+
+        after: '/room/getMessages?name=ch7',
+
+        result: {
+            status: 200
+        }
+    },
+
+];
+*/
+
+/**
+ * Пример #3
+ */
+
+/*
+module.exports = [
+
+    'authorization',
+    '/register',
+
+    {
+        method: 'POST',
+
+        params: {
+            username: 'anyasinyavskaya00000',
+            password: true
+        },
+        result: {
+            status: 403,
+            data: {
+                properties: {
+                    error:"Неправильный формат входных данных"
+                }
+            }
+        }
+    }
+
+];
+
+*/
+
+/**
+ * Пример #4
+ */
+
+/*
+
 module.exports = [
 
     'Unit test for login',
@@ -128,17 +173,36 @@ module.exports = [
     {
         params: {
             username: "anyasinyavskaya1",
-            password: 1999
+            password: "1999"
 
         },
 
         result: {
             data: {
-                value: ["Пользователь успешно создан", false]
+                value: ["Пользователь с таким именем уже зарегистрирован", false]
             }
         }
     }
 ];
+*/
 
+/**
+ * Пример #5
+ */
 
+/*
+module.exports = [
+    'Проверка пароля на сложность',
+    userController.isStrongPwd,
+    {
+        params: {
+            password: '1abYcYY#'
+        },
+        result: {
+            data: {
+                value: [true, 'Ок']
+            }
+        }
+    }
+];
 */

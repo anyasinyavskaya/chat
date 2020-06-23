@@ -3,30 +3,43 @@ let Messages = require("../models/MessageModel");
 let rooms = require("../models/RoomModel");
 let Users = require("../models/UserModel");
 
+function isValidMsg(msg) {
+    return (!!msg && typeof msg === "string" && msg.length < 1000);
+}
+
+function isValidRoomName(name) {
+    return (!!name && typeof name === "string" && name.length < 30);
+}
+
 module.exports = {
 
+    isValidMsg,
+
+    isValidRoomName,
 
     create: function (user, name, callback) {
         //console.log(user._id);
         rooms.findOne({
             name: name,
         }).exec(function (err, room) {
-            console.log("Ехес");
             if (room) {
                 callback(false, null, 'Чат уже существует')
             }
             else {
-                console.log(user);
-                let newRoom = new rooms({
-                    name: name,
-                    owner: user._id,
-                    users: [user._id],
-                });
-                newRoom.save(function (err) {
-                    if (err) return handleError(err);
-                });
-                console.log("Новый чат", newRoom);
-                callback(true, err, 'Создан новый чат')
+                if (!isValidRoomName(name)) callback(false, err, 'Неверный формат названия');
+                else {
+                    console.log(user);
+                    let newRoom = new rooms({
+                        name: name,
+                        owner: user._id,
+                        users: [user._id],
+                    });
+                    newRoom.save(function (err) {
+                        if (err) return handleError(err);
+                    });
+                    console.log("Новый чат", newRoom);
+                    callback(true, err, 'Создан новый чат')
+                }
             }
         });
     },
@@ -34,18 +47,15 @@ module.exports = {
     remove: function (user, name, callback) {
         rooms.findOne({
             name: name,
-        }).populate('owner')
-            .exec(function (err, room) {
-                if (!room) {
-                    callback(false, null, 'Чата не существует')
-                }
-                else {
-                    if (room.owner === user._id) {
-                        rooms.remove({name: name});
-                        callback(true, err, '')
-                    } else callback(false, err, 'Вы не создатель')
-                }
-            });
+        }).exec(function (err, room) {
+            if (!room) {
+                callback(false, null, 'Чата не существует')
+            }
+            else {
+                room.remove();
+                callback(true, err, '')
+            }
+        });
     },
 
     addMessage: function (name, text, user, callback) {
@@ -56,17 +66,20 @@ module.exports = {
                 callback(false, null, "Чата не существует");
             }
             else {
-                let newMessage = new Messages({
-                    text: text,
-                    sendBy: user._id,
-                });
-                newMessage.save(function (err) {
-                    if (err) return handleError(err);
-                });
-                room.messages.push(newMessage._id);
-                room.save();
-                console.log("Сообщение в БД", room.messages.length);
-                callback(newMessage, err, 'Сообщение отправлено');
+                if (!isValidMsg(text)) callback(false, err, 'Неверный формат сообщения');
+                else {
+                    let newMessage = new Messages({
+                        text: text,
+                        sendBy: user._id,
+                    });
+                    newMessage.save(function (err) {
+                        if (err) return handleError(err);
+                    });
+                    room.messages.push(newMessage._id);
+                    room.save();
+                    console.log("Сообщение в БД", room.messages.length);
+                    callback(newMessage, err, 'Сообщение отправлено');
+                }
             }
         })
     },
@@ -113,17 +126,12 @@ module.exports = {
         }).populate('messages')
             .populate({path: 'messages', populate: {path: 'sendBy'}})
             .exec(function (err, room) {
-                let result = '';
                 if (!room) {
                     callback(false, null, 'Чата не существует')
                 }
                 else {
-                    /*room.messages.forEach(function (item, i, arr) {
-                        result += '<dt>' + item.sendBy.username + '</dt>';
-                        result += '<dd>' + item.text + '</dd>';
-                    });*/
+                    callback(room.messages, err, 'Ок')
                 }
-                callback(room.messages, err, 'Ок')
             });
     },
     getUsers: function (name, callback) {
@@ -132,18 +140,17 @@ module.exports = {
         })
             .populate('users')
             .exec(function (err, room) {
-                let result = '';
                 if (!room) {
-                    console.log("Чата не существует");
-                    throw err;
+                    callback(false, null, 'Чата не существует')
                 }
                 else {
-                    room.users.forEach(function (item, i, arr) {
+                    callback(room.users, err, 'Ок');
+                    /*room.users.forEach(function (item, i, arr) {
                         if (item) result += '<div></div><a href="/ban?name=' + room.name + '&username=' + item.username + '">' +
                             '<h4>' + item + '</h4></a><div>';
-                    });
+                    });*/
                 }
-                callback(result)
+                //callback(result)
             });
     }
 };

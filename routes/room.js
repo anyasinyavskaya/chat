@@ -8,7 +8,7 @@ let roomController = require("../src/controllers/RoomController");
 roomRouter.get('/', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
-        res.status(401).redirect('/')
+        res.status(401).redirect('..')
     } else {
         let name = req.param('name');
         res.render('chat', {
@@ -26,13 +26,13 @@ roomRouter.get('/', function (req, res, next) {
 
 roomRouter.get('/logout', function (req, res, next) {
     let user = req.session.user;
-    console.log("Выход из аккаунта");
     if (user) {
+        console.log("Выход из аккаунта");
         req.session.destroy(function (err) {
             if (err) {
                 return next(err);
             } else {
-                return res.redirect('/');
+                res.send('/');
             }
         });
     }
@@ -42,7 +42,7 @@ roomRouter.get('/out', function (req, res, next) {
     let user = req.session.user;
     console.log('Выход из чата');
     if (!user) {
-        res.status(401).redirect('/')
+        res.status(401).redirect('.')
     } else {
         let name = req.param('name');
         roomController.out(user, name, function (done, err, message) {
@@ -57,7 +57,7 @@ roomRouter.get('/out', function (req, res, next) {
 roomRouter.post('/send', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
-        res.status(401).redirect('/')
+        res.status(401).redirect('..')
     } else {
         let text = req.param('text');
         let name = req.param('name');
@@ -89,22 +89,24 @@ roomRouter.post('/send', function (req, res, next) {
 roomRouter.get('/remove', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
-        res.status(401).redirect('/')
+        res.status(401).redirect('..')
+    } else {
+        let name = req.param('name');
+        console.log("Удаление чата");
+        roomController.remove(user, name, function (done, err, message) {
+            if (done) {
+                res.redirect('/chat');
+                res.end();
+            } else console.log(message);
+        })
     }
-    let name = req.param('name');
-    roomController.remove(user, name, function (done, err, message) {
-        if (done) {
-            res.redirect('/chat');
-            res.end();
-        }
-    })
 });
 
 
 roomRouter.post('/getMessages', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
-        res.status(401).redirect('/')
+        res.status(401).redirect('..');
     } else {
         let name = req.param('name');
         roomController.getMessages(name, function (messages, err, message) {
@@ -119,7 +121,7 @@ roomRouter.post('/getMessages', function (req, res, next) {
 roomRouter.post('/getUsers', function (req, res, next) {
     let user = req.session.user;
     if (!user) {
-        res.status(401).redirect('/')
+        res.status(401).redirect('..')
     } else {
         let name = req.param('name');
         roomController.getUsers(name, function (result) {
